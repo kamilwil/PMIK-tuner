@@ -114,17 +114,21 @@ int main(void)
   MX_OPAMP4_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+	//ADC
 	if (HAL_ADC_Start_DMA(&hadc4, &value, 1) != HAL_OK)
 	{
 		Error_Handler();
 	}
-	
+	//OPAMP
 	HAL_OPAMP_SelfCalibrate(&hopamp4);
 	
 	if (HAL_OPAMP_Start(&hopamp4) != HAL_OK)
 	{
 		Error_Handler();
 	}
+	//LCD
+	LCD_Init();
+	LCD_Send_String("Witaj swiecie!");
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -407,6 +407,11 @@
               <FileType>1</FileType>
               <FilePath>../Src/stm32f3xx_hal_msp.c</FilePath>
             </File>
+            <File>
+              <FileName>lcd_i2c_hd44780.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\lcd_i2c_hd44780.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
