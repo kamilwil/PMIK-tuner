@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "hd44780.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,6 +55,8 @@ TIM_HandleTypeDef htim4;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+LCD_PCF8574_HandleTypeDef lcd;
+
 uint32_t value;
 uint16_t _value;
 /* USER CODE END PV */
@@ -70,7 +72,8 @@ static void MX_ADC4_Init(void);
 static void MX_OPAMP4_Init(void);
 static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
-
+static void LCD_Initialize(void);
+static void LCD_ShowCommand(char *command);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -127,8 +130,8 @@ int main(void)
 		Error_Handler();
 	}
 	//LCD
-	LCD_Init();
-	LCD_Send_String("Witaj swiecie!");
+	LCD_Initialize();
+	LCD_ShowCommand("Init w porzo!");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -274,7 +277,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.Timing = 0x2000090E;
+  hi2c1.Init.Timing = 0x0000020B;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -548,7 +551,27 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+static void LCD_Initialize(void)
+{
+	lcd.pcf8574.PCF_I2C_ADDRESS = 7;
+	lcd.pcf8574.PCF_I2C_TIMEOUT = 1000;
+	lcd.pcf8574.i2c.Instance = I2C1;
+	lcd.pcf8574.i2c.Init.Timing = 0x0000020B;
+	lcd.NUMBER_OF_LINES = NUMBER_OF_LINES_2;
+	lcd.type = TYPE0;
+	
+	if(LCD_Init(&lcd) != LCD_OK)
+	{
+		Error_Handler();
+	}
+}
 
+static void LCD_ShowCommand(char *command)
+{
+	LCD_ClearDisplay(&lcd);
+	LCD_SetLocation(&lcd,0,0);
+	LCD_WriteString(&lcd, command);
+}
 /* USER CODE END 4 */
 
 /**

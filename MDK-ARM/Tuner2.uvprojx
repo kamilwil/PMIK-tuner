@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F303xC</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;     ../Drivers/STM32F3xx_HAL_Driver/Inc;     ../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy;     ../Drivers/CMSIS/Device/ST/STM32F3xx/Include;     ../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Inc;      ../Drivers/STM32F3xx_HAL_Driver/Inc;      ../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy;      ../Drivers/CMSIS/Device/ST/STM32F3xx/Include;      ../Drivers/CMSIS/Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -408,9 +408,14 @@
               <FilePath>../Src/stm32f3xx_hal_msp.c</FilePath>
             </File>
             <File>
-              <FileName>lcd_i2c_hd44780.c</FileName>
+              <FileName>hd44780.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Src\lcd_i2c_hd44780.c</FilePath>
+              <FilePath>..\Src\hd44780.c</FilePath>
+            </File>
+            <File>
+              <FileName>pcf8574.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\pcf8574.c</FilePath>
             </File>
           </Files>
         </Group>
