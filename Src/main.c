@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "hd44780.h"
+#include "arm_math.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -74,6 +75,7 @@ static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
 static void LCD_Initialize(void);
 static void LCD_ShowCommand(char *command);
+static void FFT_test(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -117,21 +119,23 @@ int main(void)
   MX_OPAMP4_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-	//ADC
+	//ADC on
 	if (HAL_ADC_Start_DMA(&hadc4, &value, 1) != HAL_OK)
 	{
 		Error_Handler();
 	}
-	//OPAMP
-	HAL_OPAMP_SelfCalibrate(&hopamp4);
 	
+	//OPAMP on with calibration
 	if (HAL_OPAMP_Start(&hopamp4) != HAL_OK)
 	{
 		Error_Handler();
 	}
+	HAL_OPAMP_SelfCalibrate(&hopamp4);
+
 	//LCD
 	LCD_Initialize();
 	LCD_ShowCommand("Init w porzo!");
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -551,6 +555,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
 static void LCD_Initialize(void)
 {
 	lcd.pcf8574.PCF_I2C_ADDRESS = 7;
@@ -571,6 +576,20 @@ static void LCD_ShowCommand(char *command)
 	LCD_ClearDisplay(&lcd);
 	LCD_SetLocation(&lcd,0,0);
 	LCD_WriteString(&lcd, command);
+}
+
+static void FFT_Test(void)
+{
+	const uint32_t FFT_SIZE = 256;
+	static arm_rfft_instance_q15 fft_instance;
+	static q15_t output[FFT_SIZE*2];
+	
+	arm_status status;
+	
+	status = arm_rfft_init_q15(&fft_instance, FFT_SIZE, 0, 1);
+	arm_rfft_q15(&fft_instance, (q15_t*)&value, output);
+	arm_abs_q15(output, output, FFT_SIZE);
+	
 }
 /* USER CODE END 4 */
 
