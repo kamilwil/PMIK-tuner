@@ -43,12 +43,10 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc4;
-DMA_HandleTypeDef hdma_adc4;
+ADC_HandleTypeDef hadc2;
+DMA_HandleTypeDef hdma_adc2;
 
 I2C_HandleTypeDef hi2c1;
-
-OPAMP_HandleTypeDef hopamp4;
 
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
@@ -66,12 +64,11 @@ uint16_t _value;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
-static void MX_TIM4_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART2_UART_Init(void);
-static void MX_ADC4_Init(void);
-static void MX_OPAMP4_Init(void);
 static void MX_TIM3_Init(void);
+static void MX_ADC2_Init(void);
+static void MX_TIM4_Init(void);
 /* USER CODE BEGIN PFP */
 static void LCD_Initialize(void);
 static void LCD_ShowCommand(char *command);
@@ -112,29 +109,30 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_TIM4_Init();
   MX_I2C1_Init();
   MX_USART2_UART_Init();
-  MX_ADC4_Init();
-  MX_OPAMP4_Init();
   MX_TIM3_Init();
+  MX_ADC2_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-	//ADC on
-	if (HAL_ADC_Start_DMA(&hadc4, &value, 1) != HAL_OK)
-	{
-		Error_Handler();
-	}
-	
 	//OPAMP on with calibration
-	if (HAL_OPAMP_Start(&hopamp4) != HAL_OK)
+	/*if (HAL_OPAMP_Start(&hopamp4) != HAL_OK)
 	{
 		Error_Handler();
 	}
-	HAL_OPAMP_SelfCalibrate(&hopamp4);
+	HAL_OPAMP_SelfCalibrate(&hopamp4);*/
+	
+
+	
+	//ADC on
+	if (HAL_ADC_Start_DMA(&hadc2, &value, 1) != HAL_OK)
+	{
+		Error_Handler();
+	}
 
 	//LCD
-	LCD_Initialize();
-	LCD_ShowCommand("Init w porzo!");
+	//LCD_Initialize();
+	//LCD_ShowCommand("Init w porzo!");
 
   /* USER CODE END 2 */
 
@@ -187,9 +185,9 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2|RCC_PERIPHCLK_I2C1
-                              |RCC_PERIPHCLK_ADC34;
+                              |RCC_PERIPHCLK_ADC12;
   PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
-  PeriphClkInit.Adc34ClockSelection = RCC_ADC34PLLCLK_DIV1;
+  PeriphClkInit.Adc12ClockSelection = RCC_ADC12PLLCLK_DIV4;
   PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_HSI;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
@@ -198,40 +196,40 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief ADC4 Initialization Function
+  * @brief ADC2 Initialization Function
   * @param None
   * @retval None
   */
-static void MX_ADC4_Init(void)
+static void MX_ADC2_Init(void)
 {
 
-  /* USER CODE BEGIN ADC4_Init 0 */
+  /* USER CODE BEGIN ADC2_Init 0 */
 
-  /* USER CODE END ADC4_Init 0 */
+  /* USER CODE END ADC2_Init 0 */
 
   ADC_AnalogWDGConfTypeDef AnalogWDGConfig = {0};
   ADC_ChannelConfTypeDef sConfig = {0};
 
-  /* USER CODE BEGIN ADC4_Init 1 */
+  /* USER CODE BEGIN ADC2_Init 1 */
 
-  /* USER CODE END ADC4_Init 1 */
+  /* USER CODE END ADC2_Init 1 */
   /** Common config 
   */
-  hadc4.Instance = ADC4;
-  hadc4.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
-  hadc4.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc4.Init.ScanConvMode = ADC_SCAN_DISABLE;
-  hadc4.Init.ContinuousConvMode = ENABLE;
-  hadc4.Init.DiscontinuousConvMode = DISABLE;
-  hadc4.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc4.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-  hadc4.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc4.Init.NbrOfConversion = 1;
-  hadc4.Init.DMAContinuousRequests = ENABLE;
-  hadc4.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
-  hadc4.Init.LowPowerAutoWait = DISABLE;
-  hadc4.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
-  if (HAL_ADC_Init(&hadc4) != HAL_OK)
+  hadc2.Instance = ADC2;
+  hadc2.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+  hadc2.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc2.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc2.Init.ContinuousConvMode = ENABLE;
+  hadc2.Init.DiscontinuousConvMode = DISABLE;
+  hadc2.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc2.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc2.Init.NbrOfConversion = 1;
+  hadc2.Init.DMAContinuousRequests = ENABLE;
+  hadc2.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  hadc2.Init.LowPowerAutoWait = DISABLE;
+  hadc2.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
+  if (HAL_ADC_Init(&hadc2) != HAL_OK)
   {
     Error_Handler();
   }
@@ -239,29 +237,29 @@ static void MX_ADC4_Init(void)
   */
   AnalogWDGConfig.WatchdogNumber = ADC_ANALOGWATCHDOG_1;
   AnalogWDGConfig.WatchdogMode = ADC_ANALOGWATCHDOG_SINGLE_REG;
-  AnalogWDGConfig.HighThreshold = 2100;
-  AnalogWDGConfig.LowThreshold = 2000;
-  AnalogWDGConfig.Channel = ADC_CHANNEL_3;
+  AnalogWDGConfig.HighThreshold = 0;
+  AnalogWDGConfig.LowThreshold = 0;
+  AnalogWDGConfig.Channel = ADC_CHANNEL_5;
   AnalogWDGConfig.ITMode = ENABLE;
-  if (HAL_ADC_AnalogWDGConfig(&hadc4, &AnalogWDGConfig) != HAL_OK)
+  if (HAL_ADC_AnalogWDGConfig(&hadc2, &AnalogWDGConfig) != HAL_OK)
   {
     Error_Handler();
   }
   /** Configure Regular Channel 
   */
-  sConfig.Channel = ADC_CHANNEL_3;
+  sConfig.Channel = ADC_CHANNEL_5;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.SamplingTime = ADC_SAMPLETIME_601CYCLES_5;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
-  if (HAL_ADC_ConfigChannel(&hadc4, &sConfig) != HAL_OK)
+  if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN ADC4_Init 2 */
+  /* USER CODE BEGIN ADC2_Init 2 */
 
-  /* USER CODE END ADC4_Init 2 */
+  /* USER CODE END ADC2_Init 2 */
 
 }
 
@@ -308,38 +306,6 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
-
-}
-
-/**
-  * @brief OPAMP4 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_OPAMP4_Init(void)
-{
-
-  /* USER CODE BEGIN OPAMP4_Init 0 */
-
-  /* USER CODE END OPAMP4_Init 0 */
-
-  /* USER CODE BEGIN OPAMP4_Init 1 */
-
-  /* USER CODE END OPAMP4_Init 1 */
-  hopamp4.Instance = OPAMP4;
-  hopamp4.Init.Mode = OPAMP_PGA_MODE;
-  hopamp4.Init.NonInvertingInput = OPAMP_NONINVERTINGINPUT_IO2;
-  hopamp4.Init.TimerControlledMuxmode = OPAMP_TIMERCONTROLLEDMUXMODE_DISABLE;
-  hopamp4.Init.PgaConnect = OPAMP_PGA_CONNECT_INVERTINGINPUT_NO;
-  hopamp4.Init.PgaGain = OPAMP_PGA_GAIN_2;
-  hopamp4.Init.UserTrimming = OPAMP_TRIMMING_FACTORY;
-  if (HAL_OPAMP_Init(&hopamp4) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN OPAMP4_Init 2 */
-
-  /* USER CODE END OPAMP4_Init 2 */
 
 }
 
@@ -483,9 +449,9 @@ static void MX_DMA_Init(void)
   __HAL_RCC_DMA2_CLK_ENABLE();
 
   /* DMA interrupt init */
-  /* DMA2_Channel2_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA2_Channel2_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA2_Channel2_IRQn);
+  /* DMA2_Channel1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Channel1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Channel1_IRQn);
 
 }
 
