@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "hd44780.h"
 #include "arm_math.h"
+#include "FFT_test1.inc"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -70,9 +71,18 @@ static void MX_TIM3_Init(void);
 static void MX_ADC2_Init(void);
 static void MX_TIM4_Init(void);
 /* USER CODE BEGIN PFP */
+
 static void LCD_Initialize(void);
 static void LCD_ShowCommand(char *command);
 static void FFT_test(void);
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+	if(htim->Instance == TIM3)
+	{
+		//tu przyjdzie wywolanie algorytmu FFT
+	}
+}
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -328,9 +338,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 15;
+  htim3.Init.Prescaler = 20;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 100;
+  htim3.Init.Period = 31304;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_IC_Init(&htim3) != HAL_OK)
@@ -547,13 +557,14 @@ static void LCD_ShowCommand(char *command)
 static void FFT_Test(void)
 {
 	const uint32_t FFT_SIZE = 256;
+	static unsigned char* input = FFT_test1_raw;
 	static arm_rfft_instance_q15 fft_instance;
 	static q15_t output[FFT_SIZE*2];
 	
 	arm_status status;
 	
 	status = arm_rfft_init_q15(&fft_instance, FFT_SIZE, 0, 1);
-	arm_rfft_q15(&fft_instance, (q15_t*)&value, output);
+	arm_rfft_q15(&fft_instance, (q15_t*)input, output);
 	arm_abs_q15(output, output, FFT_SIZE);
 	
 }
