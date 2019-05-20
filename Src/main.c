@@ -24,8 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "hd44780.h"
-#include "arm_math.h"
-#include "FFT_test1.inc"
+#include "ffteval.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -59,6 +58,8 @@ LCD_PCF8574_HandleTypeDef lcd;
 
 uint32_t value;
 uint16_t _value;
+
+extern const uint32_t FFT_SIZE;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -74,12 +75,12 @@ static void MX_TIM4_Init(void);
 
 static void LCD_Initialize(void);
 static void LCD_ShowCommand(char *command);
-static void FFT_test(void);
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim->Instance == TIM3)
 	{
 		//tu przyjdzie wywolanie algorytmu FFT
+		FFT_Test();
 	}
 }
 
@@ -554,20 +555,7 @@ static void LCD_ShowCommand(char *command)
 	LCD_WriteString(&lcd, command);
 }
 
-static void FFT_Test(void)
-{
-	const uint32_t FFT_SIZE = 256;
-	static unsigned char* input = FFT_test1_raw;
-	static arm_rfft_instance_q15 fft_instance;
-	static q15_t output[FFT_SIZE*2];
-	
-	arm_status status;
-	
-	status = arm_rfft_init_q15(&fft_instance, FFT_SIZE, 0, 1);
-	arm_rfft_q15(&fft_instance, (q15_t*)input, output);
-	arm_abs_q15(output, output, FFT_SIZE);
-	
-}
+
 /* USER CODE END 4 */
 
 /**

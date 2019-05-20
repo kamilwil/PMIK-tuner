@@ -417,6 +417,16 @@
               <FileType>1</FileType>
               <FilePath>../Src/stm32f3xx_hal_msp.c</FilePath>
             </File>
+            <File>
+              <FileName>ffteval.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\ffteval.h</FilePath>
+            </File>
+            <File>
+              <FileName>ffteval.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\ffteval.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
